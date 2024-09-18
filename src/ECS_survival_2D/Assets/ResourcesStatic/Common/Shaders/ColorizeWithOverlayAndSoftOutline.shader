@@ -14,7 +14,10 @@ Shader "Custom/ColorizeWithOverlayAndSoftOutline"
     }
     SubShader
     {
-        Tags { "Queue"="Transparent" "RenderType"="Transparent" "IgnoreProjector"="True" "CanUseSpriteAtlas"="True" }
+        Tags
+        {
+            "Queue"="Transparent" "RenderType"="Transparent" "IgnoreProjector"="True" "CanUseSpriteAtlas"="True"
+        }
         LOD 100
 
         Blend SrcAlpha OneMinusSrcAlpha
@@ -48,17 +51,19 @@ Shader "Custom/ColorizeWithOverlayAndSoftOutline"
             float _OutlineSmoothness; // Exposed parameter for outline smoothness
             float _FlipX;
 
-            v2f vert (appdata v)
+            v2f vert(appdata v)
             {
                 v2f o;
                 o.vertex = UnityObjectToClipPos(v.vertex);
                 o.uv = v.uv;
 
-                if (_FlipX > 0.5) {
+                if (_FlipX > 0.5)
+                {
                     o.uv.x = 1.0 - o.uv.x;
                 }
 
-                if (_MainTex_ST.z < 0) {
+                if (_MainTex_ST.z < 0)
+                {
                     o.uv.x = 1.0 - o.uv.x;
                 }
 
@@ -69,7 +74,8 @@ Shader "Custom/ColorizeWithOverlayAndSoftOutline"
             fixed4 fragOutline(v2f i) : SV_Target
             {
                 fixed4 outlineColor = _OutlineColor;
-                float2 texSize = float2(1.0 / _MainTex_TexelSize.x, 1.0 / _MainTex_TexelSize.y) * _OutlineSize * 0.00001; // Scale texSize by _OutlineSize
+                float2 texSize = float2(1.0 / _MainTex_TexelSize.x, 1.0 / _MainTex_TexelSize.y) * _OutlineSize *
+                    0.00001; // Scale texSize by _OutlineSize
 
                 // Sample the texture multiple times around the current pixel
                 float alpha = 0.0;
@@ -131,17 +137,19 @@ Shader "Custom/ColorizeWithOverlayAndSoftOutline"
             float _OverlayIntensity;
             float _FlipX;
 
-            v2f vert (appdata v)
+            v2f vert(appdata v)
             {
                 v2f o;
                 o.vertex = UnityObjectToClipPos(v.vertex);
                 o.uv = v.uv;
 
-                if (_FlipX > 0.5) {
+                if (_FlipX > 0.5)
+                {
                     o.uv.x = 1.0 - o.uv.x;
                 }
 
-                if (_MainTex_ST.z < 0) {
+                if (_MainTex_ST.z < 0)
+                {
                     o.uv.x = 1.0 - o.uv.x;
                 }
 
@@ -149,7 +157,7 @@ Shader "Custom/ColorizeWithOverlayAndSoftOutline"
                 return o;
             }
 
-            fixed4 frag (v2f i) : SV_Target
+            fixed4 frag(v2f i) : SV_Target
             {
                 // Sample the texture
                 fixed4 tex = tex2D(_MainTex, i.uv);
@@ -164,6 +172,6 @@ Shader "Custom/ColorizeWithOverlayAndSoftOutline"
             }
             ENDCG
         }
-    } 
+    }
     Fallback "Sprites/Default"
 }

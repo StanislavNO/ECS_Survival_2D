@@ -183,14 +183,12 @@ namespace Zenject
         // Then when we inject these dependencies we have to use the same ID:
         public class Norf
         {
-            [Inject(Id = "FooA")]
-            public string Foo;
+            [Inject(Id = "FooA")] public string Foo;
         }
 
         public class Qux
         {
-            [Inject(Id = "FooB")]
-            public string Foo;
+            [Inject(Id = "FooB")] public string Foo;
         }
 
         public void InstallMore2()
@@ -214,19 +212,16 @@ namespace Zenject
         // specify IDs for specific versions of the same type
         public class Norf2
         {
-            [Inject]
-            public Foo Foo;
+            [Inject] public Foo Foo;
         }
 
         // Qux2._foo will be the same instance as Norf2._foo
         // This is because we are using AsCached rather than AsTransient
         public class Qux2
         {
-            [Inject]
-            public Foo Foo;
+            [Inject] public Foo Foo;
 
-            [Inject(Id = "FooA")]
-            public Foo Foo2;
+            [Inject(Id = "FooA")] public Foo Foo2;
         }
 
         public void InstallMore3()
@@ -282,8 +277,10 @@ namespace Zenject
             Container.Bind<Bar>().WithId("Bar2").AsCached();
 
             // Here we use the 'ParentContexts' property of inject context to sync multiple corresponding identifiers
-            Container.BindInstance(foo1).When(c => c.ParentContexts.Where(x => x.MemberType == typeof(Bar) && Equals(x.Identifier, "Bar1")).Any());
-            Container.BindInstance(foo2).When(c => c.ParentContexts.Where(x => x.MemberType == typeof(Bar) && Equals(x.Identifier, "Bar2")).Any());
+            Container.BindInstance(foo1).When(c =>
+                c.ParentContexts.Where(x => x.MemberType == typeof(Bar) && Equals(x.Identifier, "Bar1")).Any());
+            Container.BindInstance(foo2).When(c =>
+                c.ParentContexts.Where(x => x.MemberType == typeof(Bar) && Equals(x.Identifier, "Bar2")).Any());
 
             // This results in:
             Assert.That(Container.ResolveId<Bar>("Bar1").Foo == foo1);
@@ -300,7 +297,8 @@ namespace Zenject
             Container.Bind<IFoo>().To<IBar>().FromResolve();
 
             // This will result in the same behaviour as the above
-            Container.Bind(typeof(Foo), typeof(IBar), typeof(IFoo)).To<Foo>().FromComponentInNewPrefab(fooPrefab).AsSingle();
+            Container.Bind(typeof(Foo), typeof(IBar), typeof(IFoo)).To<Foo>().FromComponentInNewPrefab(fooPrefab)
+                .AsSingle();
 
             InstallMore4();
         }
@@ -428,10 +426,7 @@ namespace Zenject
         {
             public Foo Foo
             {
-                get
-                {
-                    return null;
-                }
+                get { return null; }
             }
         }
     }
